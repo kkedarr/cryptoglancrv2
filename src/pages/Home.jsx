@@ -1,87 +1,78 @@
+import { useEffect, useState } from "react";
 import StatsCard from "../components/dashboard/StatsCard";
 import FiltersBar from "../components/dashboard/FiltersBar";
 import MarketTable from "../components/dashboard/MarketTable";
+import { fetchGlobalStats, fetchMarketCoins, } from "../services/marketApi";
+import MarketTableSkeleton from "../components/MarketTableSkeleton";
 
 const Home = () => {
+  const [globalStats, setGlobalStats] = useState(null);
+  const [coins, setCoins] = useState([]); // ✅ THIS WAS MISSING
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [global, market] = await Promise.all([
+          fetchGlobalStats(),
+          fetchMarketCoins(),
+        ]);
+
+        setGlobalStats(global);
+        setCoins(market); // ✅ coins now defined
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <MarketTableSkeleton />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatsCard
+          title="Total Market Cap"
+          value={`$${(globalStats.total_market_cap.usd / 1e12).toFixed(2)}T`}
+          change={`${globalStats.market_cap_change_percentage_24h_usd.toFixed(2)}%`}
+          negative={globalStats.market_cap_change_percentage_24h_usd < 0}
+        />
 
-      {/* =====================================================
-          MOBILE LAYOUT
-      ====================================================== */}
-      <div className="md:hidden space-y-6">
+        <StatsCard
+          title="24h Volume"
+          value={`$${(globalStats.total_volume.usd / 1e9).toFixed(1)}B`}
+        />
 
-        {/* Header */}
-        <div>
-          <h1 className="text-sm md:text-xl font-semibold text-text-primary-light dark:text-text-primary-dark">
-            Crypto Market Overview
-          </h1>
-          <p className="text-text-secondary-light dark:text-text-secondary-dark text-xs md:text-sm mt-1">
-            Track real-time cryptocurrency prices and trends
-          </p>
-        </div>
+        <StatsCard
+          title="BTC Dominance"
+          value={`${globalStats.market_cap_percentage.btc.toFixed(1)}%`}
+        />
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-3">
-          <StatsCard
-            title="Total Market Cap"
-            value="$2.34T"
-            change="↑ +1.24%"
-          />
-          <StatsCard
-            title="24h Volume"
-            value="$98.7B"
-            change="↓ -0.56%"
-            negative
-          />
-          <StatsCard
-            title="BTC Dominance" 
-            value="52.3%" 
-            change="↑ +0.1%" 
-          />
-
-          <StatsCard 
-            title="Market Sentiment" 
-            value="Bullish" 
-          />
-        </div>
-
-        {/* Filters */}
-        <FiltersBar />
-
-        {/* ✅ Market (mobile handled inside MarketTable now) */}
-        <MarketTable />
+        <StatsCard
+          title="Market Sentiment"
+          value={
+            globalStats.market_cap_change_percentage_24h_usd >= 0
+              ? "Bullish"
+              : "Bearish"
+          }
+        />
       </div>
 
-      {/* =====================================================
-          DESKTOP LAYOUT
-      ====================================================== */}
-      <div className="hidden md:block space-y-8">
+      <FiltersBar />
 
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-3xl font-bold">
-            Crypto Market Overview
-          </h1>
-          <p className="text-gray-500 text-sm mt-2">
-            Track real-time cryptocurrency prices and trends
-          </p>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatsCard title="Total Market Cap" value="$2.34T" change="↑ +2.1%" />
-          <StatsCard title="24h Volume" value="$120B" change="↓ -0.5%" negative />
-          <StatsCard title="BTC Dominance" value="52.3%" change="↑ +0.1%" />
-          <StatsCard title="Market Sentiment" value="Bullish" />
-        </div>
-
-        {/* Filters */}
-        <FiltersBar />
-
-        {/* Table */}
-        <MarketTable />
-      </div>
+      {/* ✅ coins is now defined */}
+      <MarketTable coins={coins} />
     </div>
   );
 };
