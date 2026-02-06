@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import StatsCard from "../components/dashboard/StatsCard";
 import FiltersBar from "../components/dashboard/FiltersBar";
 import MarketTable from "../components/dashboard/MarketTable";
-import { fetchGlobalStats, fetchMarketCoins, } from "../services/marketApi";
+import { fetchGlobalStats, fetchMarketCoins, } from "../api/marketApi";
 import MarketTableSkeleton from "../components/MarketTableSkeleton";
 
 const Home = () => {
@@ -37,6 +37,15 @@ const Home = () => {
       </div>
     );
   }
+
+  if (!globalStats || !coins.length) {
+    return (
+      <div className="text-center text-gray-400 py-12">
+        Market data temporarily unavailable
+      </div>
+    );
+  }
+
 
   return (
     <div className="space-y-8">
