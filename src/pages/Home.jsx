@@ -7,7 +7,7 @@ import MarketTableSkeleton from "../components/MarketTableSkeleton";
 
 const Home = () => {
   const [globalStats, setGlobalStats] = useState(null);
-  const [coins, setCoins] = useState([]); // ✅ THIS WAS MISSING
+  const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Home = () => {
         ]);
 
         setGlobalStats(global);
-        setCoins(market); // ✅ coins now defined
+        setCoins(market);
       } catch (err) {
         console.error(err);
       } finally {
@@ -30,6 +30,7 @@ const Home = () => {
     loadData();
   }, []);
 
+  /* ---------------- Loading ---------------- */
   if (loading) {
     return (
       <div className="space-y-6">
@@ -38,18 +39,20 @@ const Home = () => {
     );
   }
 
+  /* ---------------- Error ---------------- */
   if (!globalStats || !coins.length) {
     return (
-      <div className="text-center text-gray-400 py-12">
-        Market data temporarily unavailable
+      <div className="flex items-center justify-center h-64">
+        <p className="text-sm text-text-secondary-light dark:text-text-secondary-dark">
+          Market data temporarily unavailable
+        </p>
       </div>
     );
   }
 
-
   return (
     <div className="space-y-8">
-      {/* Stats */}
+      {/* ================= STATS ================= */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatsCard
           title="Total Market Cap"
@@ -78,12 +81,14 @@ const Home = () => {
         />
       </div>
 
+      {/* ================= FILTERS ================= */}
       <FiltersBar />
 
-      {/* ✅ coins is now defined */}
+      {/* ================= TABLE ================= */}
       <MarketTable coins={coins} />
     </div>
   );
 };
+
 
 export default Home;

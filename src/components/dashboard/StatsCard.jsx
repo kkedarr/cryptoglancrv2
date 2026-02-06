@@ -1,17 +1,27 @@
 const StatsCard = ({ title, value, change, negative }) => {
   return (
-    <div className="bg-white border rounded-xl p-4 shadow-sm">
-      <p className="text-xs text-gray-500">{title}</p>
+    <div
+      className="
+        bg-surface-light dark:bg-surface-dark
+
+        border border-border-light
+
+        rounded-xl p-4 transition
+      "
+    >
+      <p className="text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark">
+        {title}
+      </p>
 
       <div className="flex items-center justify-between mt-2">
-        <h3 className="font-semibold text-lg">
+        <h3 className="font-semibold text-lg text-text-primary-light dark:text-text-primary-dark">
           {value ?? "—"}
         </h3>
 
         {change !== undefined && (
           <span
-            className={`text-xs font-medium ${
-              negative ? "text-red-500" : "text-green-500"
+            className={`text-xs font-semibold ${
+              negative ? "text-danger" : "text-success"
             }`}
           >
             {change}
@@ -23,3 +33,4 @@ const StatsCard = ({ title, value, change, negative }) => {
 };
 
 export default StatsCard;
+
