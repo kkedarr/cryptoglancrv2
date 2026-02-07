@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import { useThemeStore } from "./store/themeStore";
+import { SearchProvider } from "./context/SearchContext";
 
 function ThemeProvider({ children }) {
   const theme = useThemeStore((s) => s.theme);
@@ -18,7 +19,9 @@ function ThemeProvider({ children }) {
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <ThemeProvider>
-      <App />
+      <SearchProvider>
+        <App />
+      </SearchProvider>
     </ThemeProvider>
   </BrowserRouter>
 );

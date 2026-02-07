@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import ThemeToggle from "../ThemeToggle";
 import logo from "../../assets/images/cryptoglancrlogo.png";
+import { useSearch } from "../../context/SearchContext";
+
 
 const navItems = [
   { path: "/", label: "Home" },
@@ -11,7 +13,10 @@ const navItems = [
   { path: "/news", label: "News" },
 ];
 
+
+
 const Navbar = () => {
+  const { query, setQuery } = useSearch();
   const [open, setOpen] = useState(false);
 
   // Lock body scroll when mobile menu open
@@ -75,6 +80,8 @@ const Navbar = () => {
 
             {/* Search */}
             <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
               placeholder="Search coins..."
               className="
                 hidden md:block w-56 rounded-md px-3 py-1.5 text-sm outline-none
@@ -86,6 +93,8 @@ const Navbar = () => {
                 transition
               "
             />
+
+
 
             <ThemeToggle />
 
@@ -153,6 +162,8 @@ const Navbar = () => {
 
           {/* Mobile Search */}
           <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Search coins..."
             className="
               w-full rounded-md px-3 py-2 text-sm outline-none
@@ -164,6 +175,8 @@ const Navbar = () => {
               transition
             "
           />
+
+
 
           {/* Links */}
           <nav className="flex flex-col gap-1">

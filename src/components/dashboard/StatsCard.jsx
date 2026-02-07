@@ -33,4 +33,3 @@ const StatsCard = ({ title, value, change, negative }) => {
 };
 
 export default StatsCard;
-
