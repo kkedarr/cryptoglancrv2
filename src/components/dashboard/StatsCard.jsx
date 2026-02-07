@@ -4,7 +4,7 @@ const StatsCard = ({ title, value, change, negative }) => {
       className="
         bg-surface-light dark:bg-surface-dark
 
-        border border-border-light
+        border border-border-light dark:border-border-dark
 
         rounded-xl p-4 transition
       "
