@@ -1,5 +1,8 @@
 import Sparkline from "../Sparkline";
 import FavoriteButton from "../FavoriteButton";
+import { useNavigate } from "react-router-dom";
+
+
 
 const formatPrice = (value) =>
   `$${value.toLocaleString(undefined, {
@@ -13,6 +16,8 @@ const formatMarketCap = (value) => {
 };
 
 const MarketTable = ({ coins = [] }) => {
+  const navigate = useNavigate();
+  
   return (
     <>
       {/* =====================================================
@@ -31,6 +36,7 @@ const MarketTable = ({ coins = [] }) => {
 
           return (
             <div
+              onClick={() => navigate(`/coin/${coin.id}`)}
               key={coin.id}
               className="
                 grid grid-cols-[1.4fr_1fr_1fr_auto] items-center gap-3
@@ -123,11 +129,12 @@ const MarketTable = ({ coins = [] }) => {
 
               return (
                 <tr
+                  onClick={() => navigate(`/coin/${coin.id}`)}
                   key={coin.id}
                   className="
                     border-t border-border-light dark:border-border-dark
                     hover:bg-black/5 dark:hover:bg-white/5
-                    transition
+                    transition cursor-pointer
                   "
                 >
                   <td className="p-4 font-medium">

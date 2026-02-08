@@ -13,7 +13,7 @@ const Home = () => {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ FILTER STATE
+  // FILTER STATE
   const { query, setQuery } = useSearch();
   const [sort, setSort] = useState("marketcap_desc");
   const [marketCap, setMarketCap] = useState("all");
@@ -38,7 +38,7 @@ const Home = () => {
     loadData();
   }, []);
 
-  // ✅ FILTER + SORT LOGIC
+  // FILTER + SORT LOGIC
   const filteredCoins = useMemo(() => {
     let data = [...coins];
 

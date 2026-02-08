@@ -3,6 +3,10 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+
+  // ✅ FIX: correct asset paths on Vercel
+  base: "/",
+
   server: {
     proxy: {
       "/api": {
